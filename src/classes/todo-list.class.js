@@ -5,11 +5,29 @@ export class TodoList {
 
   nuevoTodo(todo) {
     this.todos.push(todo);
+    this.guardarLocalStorage();
   }
 
-  eliminarTodo(id) {}
+  eliminarTodo(id) {
+    this.todos = this.todos.filter((todo) => todo.id != id);
+    this.guardarLocalStorage();
+  }
 
-  marcarCompletado(id) {}
-
-  eliminarCompletados() {}
+  marcarCompletado(id) {
+    for (const todo of this.todos) {
+      if (todo.id == id) {
+        todo.completado = !todo.completado;
+        this.guardarLocalStorage();
+        break;
+      }
+    }
+  }
+  eliminarCompletados() {
+    this.todos = this.todos.filter((todo) => !todo.completado);
+    this.guardarLocalStorage();
+  }
+  guardarLocalStorage() {
+    localStorage.setItem('todo', JSON.stringify(this.todos));//JSON y el metodo stringify me convertira o hara ver mis dos metodos dentro del parentesis como un string, para que el localStorage los reconozca y guarde
+  }
+  cargarLocalStorage() {}
 }
