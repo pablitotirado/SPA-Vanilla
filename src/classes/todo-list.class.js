@@ -1,6 +1,7 @@
 export class TodoList {
   constructor() {
     this.todos = [];
+    this.cargarLocalStorage();
   }
 
   nuevoTodo(todo) {
@@ -27,7 +28,14 @@ export class TodoList {
     this.guardarLocalStorage();
   }
   guardarLocalStorage() {
-    localStorage.setItem('todo', JSON.stringify(this.todos));//JSON y el metodo stringify me convertira o hara ver mis dos metodos dentro del parentesis como un string, para que el localStorage los reconozca y guarde
+    localStorage.setItem('todo', JSON.stringify(this.todos)); //JSON y el metodo stringify me convertira o hara ver mis dos metodos dentro del parentesis como un string, para que el localStorage los reconozca y guarde
   }
-  cargarLocalStorage() {}
+  cargarLocalStorage() {
+    if (localStorage.getItem('todo')) {
+      this.todos = JSON.parse(localStorage.getItem('todo'));
+      console.log('cargar local Storage', this.todos);
+    } else {
+      this.todos = [];
+    }
+  }
 }
