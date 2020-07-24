@@ -1,62 +1,56 @@
-const HtmlWebPackPlugin       = require('html-webpack-plugin'); 
-const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    optimization: {
-        minimizer: [ new OptimizeCssAssetsPlugin() ]
-    },
-    module: {
-        rules: [
-            {
-                test: /\.css$/,
-                exclude: /styles\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
+  mode: 'development',
+  optimization: {
+    minimizer: [new OptimizeCssAssetsPlugin()],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: false },
+          },
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: false,
+              },
             },
-            {
-                test: /styles\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader'
-                ]
+          },
+        ],
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+              name: 'assets/[name].[ext]',
             },
-            {
-                test: /\.html$/,
-                use: [
-                    {
-                        loader: 'html-loader',
-                        options: { minimize: false }
-                    }
-                ]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            esModule: false,
-                            name: 'assets/[name].[ext]'
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    plugins: [
-        new HtmlWebPackPlugin({
-            template: './src/index.html',
-            filename: './index.html'
-        }),
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            ignoreOrder: false
-        })
-    ]
-
-}
-
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: './src/index.html',
+      filename: './index.html',
+    }),
+  ],
+};
